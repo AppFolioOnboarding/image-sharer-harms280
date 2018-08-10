@@ -8,7 +8,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_show
-    get image_url(Image.first)
+    image = Image.create(link: 'https://www.massinsight.org/wp-content/uploads/2016/05/placeholder-4-500x300.png')
+
+    get image_url(image)
 
     assert_response :ok
     assert_select '#header', 'Show Image'

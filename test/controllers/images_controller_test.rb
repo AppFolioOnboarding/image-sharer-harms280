@@ -3,7 +3,9 @@ require 'test_helper'
 class ImagesControllerTest < ActionDispatch::IntegrationTest
   def test_new
     get new_image_url
-    assert_response :success
+
+    assert_response :ok
+    assert_select '#header', 'Create new Image!'
   end
 
   def test_show

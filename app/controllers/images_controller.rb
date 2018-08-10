@@ -4,8 +4,7 @@ class ImagesController < ApplicationController
   end
 
   def new
-    # Comment out when model is built
-    # @image = Image.new
+    @image = Image.new
   end
 
   private

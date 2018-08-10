@@ -7,6 +7,16 @@ class ImagesController < ApplicationController
     @image = Image.new
   end
 
+  def create
+    @image = Image.new(image_params)
+
+    if @image.save
+      redirect_to @image
+    else
+      render 'new', status: :unprocessable_entity
+    end
+  end
+
   private
 
   def image_params

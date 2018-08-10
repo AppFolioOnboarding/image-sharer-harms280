@@ -1,7 +1,6 @@
 class ImagesController < ApplicationController
   def show
-    # Comment out when Image model is generated
-    # @image = Image.find(params[:id])
+    @image = Image.find(params[:id])
   end
 
   def new

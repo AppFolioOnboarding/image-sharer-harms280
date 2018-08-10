@@ -7,7 +7,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_show
-    get image_url(1)
-    assert_response :success
+    get image_url(Image.first[:id])
+
+    assert_response :ok
+    assert_select '#header', 'Show Image'
   end
 end

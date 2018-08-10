@@ -19,8 +19,11 @@
     <div>
       <%= form.label :link %>
       <%=	 form.text_field :link %>
-      <% if @image.errors[:link].present? %>
-          <p id="link-error"><%= @image.errors.full_messages_for(:link).join('') %></p>
+      <% if @image.errors[:link].present?
+           @image.errors.full_messages_for(:link).each do |msg|
+      %>
+          <p id="link-error"><%= msg %></p>
+          <% end %>
       <%end%>
     </div>
     <div>

@@ -1,6 +1,20 @@
 require 'test_helper'
 
 class ImagesControllerTest < ActionDispatch::IntegrationTest
+  def test_index
+    image = Image.create(link: 'https://www.massinsight.org/wp-content/uploads/2016/05/placeholder-4-500x300.png')
+    image2 = Image.create(link: 'http://www.qygjxz.com/data/out/193/4949794-random-image.jpg')
+
+    get images_url
+
+    assert_response :ok
+
+    assert_select '.img' do |images|
+      assert_equal image2.link, images.first[:src]
+      assert_equal image.link, images.last[:src]
+    end
+  end
+
   def test_new
     get new_image_url
     assert_response :ok

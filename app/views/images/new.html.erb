@@ -1,0 +1,32 @@
+<h1 id="header">Create new Image!</h1>
+
+<%= form_with scope: :image, url: images_path, local: true do |form| %>
+  <h2>Insert URL link to image below</h2>
+    <% if @image.errors.any? %>
+        <div id="error_explanation">
+          <h4>
+            <%= pluralize(@image.errors.count, "error") %> prohibited
+            this image from being saved:
+          </h4>
+          <ul>
+            <% @image.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div>
+      <%= form.label :link %>
+      <%=	 form.text_field :link %>
+      <% if @image.errors[:link].present?
+           @image.errors.full_messages_for(:link).each do |msg|
+      %>
+          <p id="link-error"><%= msg %></p>
+          <% end %>
+      <%end%>
+    </div>
+    <div>
+      <%= form.submit %>
+    </div>
+<%end%>

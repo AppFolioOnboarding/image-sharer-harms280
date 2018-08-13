@@ -45,6 +45,6 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_entity
-    assert_select '#link-error', "Link can't be blank"
+    assert_select '.invalid-feedback', "Link can't be blank and Link invalid URL. Link requires http or https"
   end
 end

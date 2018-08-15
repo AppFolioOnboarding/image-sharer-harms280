@@ -9,7 +9,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :ok
 
-    assert_select '.img' do |images|
+    assert_select '.card__img' do |images|
       assert_equal image2.link, images.first[:src]
       assert_equal image.link, images.last[:src]
     end

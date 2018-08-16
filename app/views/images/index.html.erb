@@ -1,7 +1,11 @@
 <h1>Index of Images</h1>
 <div>
-  <% @images.each do |img| %>
-      <%= image_tag(img.link, class: 'img') %>
-  <% end %>
+  <div class="card-columns">
+    <% @images.each do |img| %>
+        <div class="card">
+          <%= image_tag(img.link, class: 'card__img card-img') %>
+        </div>
+    <% end %>
+  </div>
 </div>
 <%= link_to 'Add Image', new_image_path %>

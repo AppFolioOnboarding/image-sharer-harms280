@@ -1,6 +1,12 @@
 // Place all the styles related to the Images controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.img {
+.card__img {
   max-width:400px;
+}
+
+@media (max-width: 575px) {
+  .card__img {
+    max-width: inherit;
+  }
 }

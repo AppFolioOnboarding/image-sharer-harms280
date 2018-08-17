@@ -2,8 +2,10 @@ require 'test_helper'
 
 class ImagesControllerTest < ActionDispatch::IntegrationTest
   def test_index
-    image = Image.create(link: 'https://www.massinsight.org/wp-content/uploads/2016/05/placeholder-4-500x300.png')
-    image2 = Image.create(link: 'http://www.qygjxz.com/data/out/193/4949794-random-image.jpg')
+    image = Image.create(link: 'https://www.massinsight.org/wp-content/uploads/2016/05/placeholder-4-500x300.png',
+                         tag_list: '')
+    image2 = Image.create(link: 'http://www.qygjxz.com/data/out/193/4949794-random-image.jpg',
+                          tag_list: 'tag1, tag2, tag3')
 
     get images_url
 
@@ -22,7 +24,8 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_show
-    image = Image.create(link: 'https://www.massinsight.org/wp-content/uploads/2016/05/placeholder-4-500x300.png')
+    image = Image.create(link: 'https://www.massinsight.org/wp-content/uploads/2016/05/placeholder-4-500x300.png',
+                         tag_list: '')
 
     get image_url(image)
 
@@ -32,15 +35,23 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
   def test_create__succeed
     assert_difference('Image.count', 1) do
-      image_params = { link: 'https://picsum.com/photos/200/300/?image=290' }
+      image_params = { link: 'https://picsum.com/photos/200/300/?image=290', tag_list: 'tag1, tag2, tag3' }
       post images_url, params: { image: image_params }
+
       assert_redirected_to image_path(Image.last)
+      follow_redirect!
+
+      assert_select '.tag-list li' do |tags|
+        assert_equal 'tag1', tags[0].text
+        assert_equal 'tag2', tags[1].text
+        assert_equal 'tag3', tags[2].text
+      end
     end
   end
 
   def test_create__fail
     assert_no_difference('Image.count') do
-      image_params = { link: '' }
+      image_params = { link: '', tag_list: 'tag1, tag2, tag3' }
       post images_path, params: { image: image_params }
     end
 

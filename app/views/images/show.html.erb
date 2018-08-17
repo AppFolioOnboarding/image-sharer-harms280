@@ -1,2 +1,8 @@
 <h1 id="header">Show Image</h1>
 <img src="<%= @image.link %>">
+<h2>Tags</h2>
+<ul class="tag-list">
+  <%  @image.tag_list.each do |tag| %>
+    <li><%= tag %></li>
+  <% end %>
+</ul>

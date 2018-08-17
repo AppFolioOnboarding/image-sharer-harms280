@@ -1,4 +1,8 @@
 $primary: purple;
 $body-bg: #e0e0e0;
 
+.navbar + .container {
+  padding-bottom: 60px; //prevents footer from covering up content on bottom of page
+}
+
 @import "bootstrap";

@@ -9,6 +9,7 @@ AllCops:
     - 'db/seeds.rb'
     - 'config/initializers/simple_form.rb'
     - 'config/initializers/simple_form_bootstrap.rb'
+    - 'db/migrate/*acts_as_taggable_on_engine*'
   TargetRubyVersion: 2.5
 
 Layout/IndentArray:

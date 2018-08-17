@@ -1,6 +1,7 @@
 <h1 id="header">Create new Image!</h1>
 
 <%= simple_form_for @image do |form| %>
-  <%= form.input :link, as: :string %>
-  <%= form.button :submit, class: 'btn btn-primary' %>
+    <%= form.input :link, as: :string %>
+    <%= form.input :tag_list, placeholder: 'Enter tag names separated by commas', input_html: { value: @image.tag_list.join(', ') } %>
+    <%= form.button :submit, class: 'btn btn-primary' %>
 <% end %>

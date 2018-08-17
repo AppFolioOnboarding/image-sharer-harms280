@@ -43,4 +43,22 @@ class ImageTest < ActiveSupport::TestCase
       assert_equal 'invalid URL. Link requires http or https', img.errors.messages[:link].first
     end
   end
+
+  def test_add_tags_to_image
+    image = Image.new(link: 'https://carepharmaceuticals.com.au/wp-content/uploads/sites/19/2018/02/placeholder-600x400.png')
+    image.tag_list.add('test')
+    image.save
+
+    saved_image = Image.find(image.id)
+    assert_equal ['test'], saved_image.tag_list
+  end
+
+  def test_add_multiple_tags_to_image
+    image = Image.new(link: 'https://carepharmaceuticals.com.au/wp-content/uploads/sites/19/2018/02/placeholder-600x400.png')
+    image.tag_list.add('test', 'test2', 'test3')
+    image.save
+
+    saved_image = Image.find(image.id)
+    assert_equal %w[test test2 test3], saved_image.tag_list
+  end
 end

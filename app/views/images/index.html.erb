@@ -1,4 +1,7 @@
 <h1>Index of Images</h1>
+<% if params[:tag] %>
+<h2 id="tag-name-header">Images associated with tag: <span class="text-info"><%= params[:tag] %></span></h2>
+<% end %>
 <div>
   <%= render partial: 'card_columns', locals: {images: @images} %>
 </div>

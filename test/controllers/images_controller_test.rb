@@ -58,4 +58,18 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :unprocessable_entity
     assert_select '.invalid-feedback', "Link can't be blank and Link invalid URL. Link requires http or https"
   end
+
+  def test_show_images_associated_with_tag
+    Image.create(link: 'https://www.massinsight.org/wp-content/uploads/2016/05/placeholder-4-500x300.png',
+                 tag_list: 'tag1, tag2')
+    Image.create(link: 'https://picsum.com/photos/200/300/?image=290', tag_list: 'tag2, tag3')
+
+    get images_url(tag: 'tag1')
+
+    assert_select 'img' do |images|
+      assert_equal 1, images.count
+      assert_equal 'https://www.massinsight.org/wp-content/uploads/2016/05/placeholder-4-500x300.png',
+                   images[0][:src]
+    end
+  end
 end

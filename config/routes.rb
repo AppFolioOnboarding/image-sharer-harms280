@@ -3,4 +3,6 @@ Rails.application.routes.draw do
   root 'images#index'
 
   resources :images, only: %i[index new show create]
+
+  get '/tags/:name', to: 'tags#show', as: :tag
 end

@@ -1,6 +1,15 @@
 class ImagesController < ApplicationController
   def index
-    @images = Image.all.order('created_at DESC')
+    tag_name = params[:tag]
+
+    if tag_name
+      @tag = ActsAsTaggableOn::Tag.find_by(name: tag_name)
+      @images = Image.tagged_with(tag_name).order('created_at DESC')
+
+      flash.now.alert = "Tag #{tag_name} does not exist" if @tag.nil?
+    else
+      @images = Image.all.order('created_at DESC')
+    end
   end
 
   def show

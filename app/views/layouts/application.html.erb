@@ -13,6 +13,7 @@
   <body>
 
     <%= render partial: 'layouts/navbar' %>
+    <%=	 render partial: 'layouts/flash_messages' unless flash.empty? %>
     <div class="container">
       <%= yield %>
     </div>

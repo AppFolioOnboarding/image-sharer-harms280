@@ -1,7 +1,12 @@
 <div class="card-columns">
   <% @images.each do |img| %>
       <div class="card">
-        <%= link_to(image_tag(img.link, class: 'card__img card-img'), image_path(img) ) %>
+        <%= link_to(image_tag(img.link, class: 'card__img card-img-top'), image_path(img) ) %>
+        <div class="card-body">
+          <% img.tag_list.each do |tag| %>
+              <%= link_to( tag, images_path(tag: tag), class: 'badge badge-secondary')%>
+          <% end %>
+        </div>
       </div>
   <% end %>
 </div>

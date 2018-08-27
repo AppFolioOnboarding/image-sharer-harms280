@@ -5,7 +5,9 @@ module PageObjects
 
       collection :images, locator: '.card-columns', item_locator: '.card', contains: ImageCard do
         def view!
-          # TODO
+          node.click
+
+          window.change_to(ShowPage)
         end
       end
 
@@ -17,8 +19,7 @@ module PageObjects
       def showing_image?(link:, tags: nil)
         images.any? do |image|
           result = image.link == link
-          tags.present? ? (result && image.tags == tags): result
-
+          # tags.present? ? (result && image.tags == tags): result
         end
       end
 

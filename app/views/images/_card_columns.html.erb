@@ -1,7 +1,7 @@
 <div class="card-columns">
   <% @images.each do |img| %>
       <div class="card">
-        <%= image_tag(img.link, class: 'card__img card-img') %>
+        <%= link_to(image_tag(img.link, class: 'card__img card-img'), image_path(img) ) %>
       </div>
   <% end %>
 </div>

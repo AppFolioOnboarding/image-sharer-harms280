@@ -5,9 +5,8 @@ module PageObjects
 
       collection :tag_elements, locator: '.tag-list', item_locator: 'li'
 
-
       def image_url
-       node.find("img")[:src]
+        node.find('img')[:src]
       end
 
       def tags
@@ -15,12 +14,13 @@ module PageObjects
       end
 
       def delete
-        # TODO
+        node.click_on('Delete')
         yield node.driver.browser.switch_to.alert
       end
 
       def delete_and_confirm!
-        # TODO
+        delete(&:accept)
+
         window.change_to(IndexPage)
       end
 

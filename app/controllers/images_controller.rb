@@ -35,7 +35,7 @@ class ImagesController < ApplicationController
     @image = Image.find(params[:id])
     @image.destroy
 
-    flash[:success] = 'Delete successful'
+    flash[:success] = 'You have successfully deleted the image.'
     redirect_to images_path
   end
 

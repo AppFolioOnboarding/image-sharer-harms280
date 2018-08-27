@@ -1,3 +1,5 @@
+require_relative 'image_card'
+
 module PageObjects
   module Images
     class IndexPage < PageObjects::Document

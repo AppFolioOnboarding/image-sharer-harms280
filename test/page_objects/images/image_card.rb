@@ -1,7 +1,7 @@
 module PageObjects
   module Images
     class ImageCard < AePageObjects::Element
-      def url
+      def link
         node.find('img')[:src]
       end
 

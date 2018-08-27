@@ -24,6 +24,7 @@ class ImagesController < ApplicationController
     @image = Image.new(image_params)
 
     if @image.save
+      flash[:success] = 'You have successfully added an image.'
       redirect_to @image
     else
       render :new, status: :unprocessable_entity

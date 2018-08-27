@@ -8,13 +8,13 @@ class ImagesCrudTest < FlowTestCase
 
     tags = %w[foo bar]
     new_image_page = new_image_page.create_image!(
-      url: 'invalid',
+      link: 'invalid',
       tags: tags.join(', ')
     ).as_a(PageObjects::Images::NewPage)
-    assert_equal 'must be a valid URL', new_image_page.url.error_message
+    assert_equal 'Link invalid URL. Link requires http or https', new_image_page.link.error_message
 
     image_url = 'https://media3.giphy.com/media/EldfH1VJdbrwY/200.gif'
-    new_image_page.url.set(image_url)
+    new_image_page.link.set(image_url)
 
     image_show_page = new_image_page.create_image!
     assert_equal 'You have successfully added an image.', image_show_page.flash_message(:success)
@@ -23,7 +23,7 @@ class ImagesCrudTest < FlowTestCase
     assert_equal tags, image_show_page.tags
 
     images_index_page = image_show_page.go_back_to_index!
-    assert images_index_page.showing_image?(url: image_url, tags: tags)
+    assert images_index_page.showing_image?(link: image_url, tags: tags)
   end
 
   test 'delete an image' do

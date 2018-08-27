@@ -3,12 +3,15 @@ module PageObjects
     class ShowPage < PageObjects::Document
       path :image
 
+      collection :tag_elements, locator: '.tag-list', item_locator: 'li'
+
+
       def image_url
-        # TODO
+       node.find("img")[:src]
       end
 
       def tags
-        # TODO
+        tag_elements.map(&:text)
       end
 
       def delete
@@ -22,7 +25,8 @@ module PageObjects
       end
 
       def go_back_to_index!
-        # TODO
+        node.click_on('Home')
+        window.change_to(IndexPage)
       end
     end
   end

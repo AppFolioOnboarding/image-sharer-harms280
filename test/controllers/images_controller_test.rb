@@ -59,6 +59,17 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select '.invalid-feedback', "Link can't be blank and Link invalid URL. Link requires http or https"
   end
 
+  def test_destroy
+    image = Image.create(link: 'http://www.qygjxz.com/data/out/193/4949794-random-image.jpg',
+                         tag_list: 'tag1, tag2, tag3')
+
+    assert_difference('Image.count', -1) do
+      delete image_path(image)
+    end
+
+    assert_redirected_to images_path
+  end
+
   def test_show_images_associated_with_tag
     Image.create(link: 'https://www.massinsight.org/wp-content/uploads/2016/05/placeholder-4-500x300.png',
                  tag_list: 'tag1, tag2')

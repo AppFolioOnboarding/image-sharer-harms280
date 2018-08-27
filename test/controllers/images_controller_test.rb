@@ -77,6 +77,8 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_redirected_to images_path
+    follow_redirect!
+    assert_select '.alert-success', 'You have successfully deleted the image.'
   end
 
   def test_destroy__cannot_destroy_image_that_does_not_exist

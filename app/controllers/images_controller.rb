@@ -1,4 +1,6 @@
 class ImagesController < ApplicationController
+  before_action :validate_image_exists, only: %i[show destroy]
+
   def index
     tag_name = params[:tag]
 
@@ -12,9 +14,7 @@ class ImagesController < ApplicationController
     end
   end
 
-  def show
-    @image = Image.find(params[:id])
-  end
+  def show; end
 
   def new
     @image = Image.new
@@ -32,7 +32,6 @@ class ImagesController < ApplicationController
   end
 
   def destroy
-    @image = Image.find(params[:id])
     @image.destroy
 
     flash[:success] = 'You have successfully deleted the image.'
@@ -43,5 +42,13 @@ class ImagesController < ApplicationController
 
   def image_params
     params.require(:image).permit(:link, :tag_list)
+  end
+
+  def validate_image_exists
+    @image = Image.find_by(id: params[:id])
+    return if @image
+
+    flash[:warning] = 'Image does not exist.'
+    redirect_to images_path
   end
 end

@@ -6,3 +6,4 @@
     <li><%= link_to tag, images_url(tag: tag) %></li>
   <% end %>
 </ul>
+<%= link_to 'Delete', image_path(@image), method: :delete, class: 'btn btn-danger', data: {confirm: 'Are you sure?'} %>

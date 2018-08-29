@@ -1,0 +1,8 @@
+<h1 id="header">Edit Image!</h1>
+
+<%= image_tag @image.link %>
+
+<%= simple_form_for @image do |form| %>
+    <%= form.input :tag_list, placeholder: 'Enter tag names separated by commas', input_html: { value: @image.tag_list.join(', ') } %>
+    <%= form.button :submit, class: 'btn btn-primary' %>
+<% end %>

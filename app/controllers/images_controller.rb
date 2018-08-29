@@ -1,5 +1,5 @@
 class ImagesController < ApplicationController
-  before_action :validate_image_exists, only: %i[show destroy]
+  before_action :validate_image_exists, only: %i[show edit update destroy]
 
   def index
     tag_name = params[:tag]
@@ -20,6 +20,8 @@ class ImagesController < ApplicationController
     @image = Image.new
   end
 
+  def edit; end
+
   def create
     @image = Image.new(image_params)
 
@@ -28,6 +30,15 @@ class ImagesController < ApplicationController
       redirect_to @image
     else
       render :new, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    if @image.update(image_update_params)
+      flash[:success] = 'You have successfully updated an image'
+      redirect_to @image
+    else
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -42,6 +53,10 @@ class ImagesController < ApplicationController
 
   def image_params
     params.require(:image).permit(:link, :tag_list)
+  end
+
+  def image_update_params
+    params.require(:image).permit(:tag_list)
   end
 
   def validate_image_exists

@@ -67,6 +67,42 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select '.invalid-feedback', "Link can't be blank and Link invalid URL. Link requires http or https"
   end
 
+  def test_edit
+    image = create_image
+
+    get edit_image_url(image)
+
+    assert_response :ok
+    assert_select '#header', 'Edit Image!'
+  end
+
+  def test_update__success
+    image = create_image
+    image_params = { tag_list: 'updatedTag1, updatedTag2' }
+
+    put image_url(image), params: { image: image_params }
+
+    assert_redirected_to image_path(image)
+    follow_redirect!
+
+    assert_select '.tag-list li' do |tags|
+      assert_equal 'updatedTag1', tags[0].text
+      assert_equal 'updatedTag2', tags[1].text
+    end
+
+    assert_select '.alert-success', 'You have successfully updated an image'
+  end
+
+  def test_update__fail
+    image = create_image
+    image_params = { tag_list: '' }
+
+    put image_url(image), params: { image: image_params }
+
+    assert_response :unprocessable_entity
+    assert_select '.invalid-feedback', "Tag list can't be blank"
+  end
+
   def test_destroy
     image = Image.create(link: 'http://www.qygjxz.com/data/out/193/4949794-random-image.jpg',
                          tag_list: 'tag1, tag2, tag3')

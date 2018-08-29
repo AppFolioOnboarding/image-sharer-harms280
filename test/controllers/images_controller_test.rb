@@ -110,6 +110,6 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
   def create_image(link: 'https://carepharmaceuticals.com.au/wp-content/uploads/sites/19/2018/02/placeholder-600x400.png',
                    tag_list: 'tag1 tag2 tag3')
-    Image.create(link: link, tag_list: tag_list)
+    Image.create!(link: link, tag_list: tag_list)
   end
 end

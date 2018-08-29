@@ -2,16 +2,25 @@ require 'test_helper'
 
 class ImageTest < ActiveSupport::TestCase
   def test_image__valid
-    image = Image.new(link: 'https://carepharmaceuticals.com.au/wp-content/uploads/sites/19/2018/02/placeholder-600x400.png')
+    image = Image.new(link: 'https://carepharmaceuticals.com.au/wp-content/uploads/sites/19/2018/02/placeholder-600x400.png',
+                      tag_list: 'tag1 tag2')
 
     assert_predicate image, :valid?
   end
 
   def test_image__invalid_if_link_is_blank
-    image = Image.new(link: '')
+    image = new_image(link: '')
 
     assert_not_predicate image, :valid?
-    assert_equal "can't be blank", image.errors.messages[:link].first
+    assert_equal({ link: ["can't be blank", 'invalid URL. Link requires http or https'] },
+                 image.errors.messages)
+  end
+
+  def test_image__invalid_if_no_tags
+    image = new_image(tag_list: '')
+
+    assert_not_predicate image, :valid?
+    assert_equal({ tag_list: ["can't be blank"] }, image.errors.messages)
   end
 
   def test_image__valid_if_link_is_valid_url
@@ -21,7 +30,7 @@ class ImageTest < ActiveSupport::TestCase
     images = []
 
     valid_urls.each do |url|
-      images.push(Image.new(link: url))
+      images.push(Image.new(link: url, tag_list: 'tag1 tag2'))
     end
 
     images.each do |img|
@@ -35,12 +44,12 @@ class ImageTest < ActiveSupport::TestCase
     images = []
 
     invalid_urls.each do |url|
-      images.push(Image.new(link: url))
+      images.push(new_image(link: url))
     end
 
     images.each do |img|
       assert_not_predicate img, :valid?
-      assert_equal 'invalid URL. Link requires http or https', img.errors.messages[:link].first
+      assert_equal({ link: ['invalid URL. Link requires http or https'] }, img.errors.messages)
     end
   end
 
@@ -60,5 +69,12 @@ class ImageTest < ActiveSupport::TestCase
 
     saved_image = Image.find(image.id)
     assert_equal %w[test test2 test3], saved_image.tag_list
+  end
+
+  private
+
+  def new_image(link: 'https://carepharmaceuticals.com.au/wp-content/uploads/sites/19/2018/02/placeholder-600x400.png',
+                tag_list: 'tag1 tag2 tag3')
+    Image.new(link: link, tag_list: tag_list)
   end
 end

@@ -3,7 +3,7 @@ require 'test_helper'
 class ImagesControllerTest < ActionDispatch::IntegrationTest
   def test_index
     image = Image.create(link: 'https://www.massinsight.org/wp-content/uploads/2016/05/placeholder-4-500x300.png',
-                         tag_list: '')
+                         tag_list: 'tag1, tag3')
     image2 = Image.create(link: 'http://www.qygjxz.com/data/out/193/4949794-random-image.jpg',
                           tag_list: 'tag1, tag2, tag3')
 
@@ -24,8 +24,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_show
-    image = Image.create(link: 'https://www.massinsight.org/wp-content/uploads/2016/05/placeholder-4-500x300.png',
-                         tag_list: '')
+    image = create_image
 
     get image_url(image)
 
@@ -105,5 +104,12 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
       assert_equal 'https://www.massinsight.org/wp-content/uploads/2016/05/placeholder-4-500x300.png',
                    images[0][:src]
     end
+  end
+
+  private
+
+  def create_image(link: 'https://carepharmaceuticals.com.au/wp-content/uploads/sites/19/2018/02/placeholder-600x400.png',
+                   tag_list: 'tag1 tag2 tag3')
+    Image.create!(link: link, tag_list: tag_list)
   end
 end

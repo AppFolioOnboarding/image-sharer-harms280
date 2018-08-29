@@ -4,5 +4,7 @@ class Image < ApplicationRecord
   validates :link, presence: true,
                    format: { with: URL_REGEX, message: 'invalid URL. Link requires http or https' }
 
+  validates :tag_list, presence: true
+
   acts_as_taggable
 end

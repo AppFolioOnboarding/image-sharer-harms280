@@ -26,6 +26,37 @@ class ImagesCrudTest < FlowTestCase
     assert images_index_page.showing_image?(link: image_url, tags: tags)
   end
 
+  test 'update an image' do
+    cute_puppy_url = 'http://ghk.h-cdn.co/assets/16/09/980x490/landscape-1457107485-gettyimages-512366437.jpg'
+    tags = %w[puppy cute]
+    Image.create!(link: cute_puppy_url, tag_list: tags.join(', '))
+
+    images_index_page = PageObjects::Images::IndexPage.visit
+    assert_equal 1, images_index_page.images.count
+    assert images_index_page.showing_image?(link: cute_puppy_url, tags: tags)
+
+    image_to_update = images_index_page.images.find do |image|
+      image.link == cute_puppy_url
+    end
+    image_show_page = image_to_update.view!
+    edit_image_page = image_show_page.edit!
+
+    edit_image_page.tag_list.set('')
+    edit_image_page = edit_image_page.update_image_invalid!.as_a(PageObjects::Images::EditPage)
+    assert_equal "Tag list can't be blank", edit_image_page.tag_list.error_message
+
+    updated_tags = %w[puppy cute updatedTag]
+    edit_image_page.tag_list.set(updated_tags.join(', '))
+    image_show_page = edit_image_page.update_image_valid!.as_a(PageObjects::Images::ShowPage)
+
+    assert_equal 'You have successfully updated an image', image_show_page.flash_message(:success)
+
+    assert_equal updated_tags, image_show_page.tags
+
+    images_index_page = image_show_page.go_back_to_index!
+    assert images_index_page.showing_image?(link: cute_puppy_url, tags: updated_tags)
+  end
+
   test 'delete an image' do
     cute_puppy_url = 'http://ghk.h-cdn.co/assets/16/09/980x490/landscape-1457107485-gettyimages-512366437.jpg'
     ugly_cat_url = 'http://www.ugly-cat.com/ugly-cats/uglycat041.jpg'

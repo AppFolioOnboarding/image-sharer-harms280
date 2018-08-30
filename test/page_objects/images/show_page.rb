@@ -13,6 +13,11 @@ module PageObjects
         tag_elements.map(&:text)
       end
 
+      def edit!
+        node.click_on('Edit')
+        window.change_to(EditPage)
+      end
+
       def delete
         node.click_on('Delete')
         yield node.driver.browser.switch_to.alert

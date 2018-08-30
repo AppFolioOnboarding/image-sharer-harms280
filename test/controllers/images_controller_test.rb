@@ -1,19 +1,20 @@
+# rubocop:disable Metrics/ClassLength
 require 'test_helper'
 
 class ImagesControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    @image = create_image
+  end
+
   def test_index
-    image = Image.create(link: 'https://www.massinsight.org/wp-content/uploads/2016/05/placeholder-4-500x300.png',
-                         tag_list: 'tag1, tag3')
-    image2 = Image.create(link: 'http://www.qygjxz.com/data/out/193/4949794-random-image.jpg',
-                          tag_list: 'tag1, tag2, tag3')
+    image2 = create_image(link: 'http://www.qygjxz.com/data/out/193/4949794-random-image.jpg')
 
     get images_url
 
     assert_response :ok
-
     assert_select '.card__img' do |images|
       assert_equal image2.link, images.first[:src]
-      assert_equal image.link, images.last[:src]
+      assert_equal @image.link, images.last[:src]
     end
   end
 
@@ -24,9 +25,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_show
-    image = create_image
-
-    get image_url(image)
+    get image_url(@image)
 
     assert_response :ok
     assert_select '#header', 'Show Image'
@@ -67,12 +66,40 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select '.invalid-feedback', "Link can't be blank and Link invalid URL. Link requires http or https"
   end
 
-  def test_destroy
-    image = Image.create(link: 'http://www.qygjxz.com/data/out/193/4949794-random-image.jpg',
-                         tag_list: 'tag1, tag2, tag3')
+  def test_edit
+    get edit_image_url(@image)
 
+    assert_response :ok
+    assert_select '#header', 'Edit Image!'
+  end
+
+  def test_update__success
+    image_params = { tag_list: 'updatedTag1, updatedTag2' }
+
+    put image_url(@image), params: { image: image_params }
+
+    assert_redirected_to image_path(@image)
+    follow_redirect!
+
+    assert_select '.tag-list li' do |tags|
+      assert_equal 'updatedTag1', tags[0].text
+      assert_equal 'updatedTag2', tags[1].text
+    end
+    assert_select '.alert-success', 'You have successfully updated an image'
+  end
+
+  def test_update__fail
+    image_params = { tag_list: '' }
+
+    put image_url(@image), params: { image: image_params }
+
+    assert_response :unprocessable_entity
+    assert_select '.invalid-feedback', "Tag list can't be blank"
+  end
+
+  def test_destroy
     assert_difference('Image.count', -1) do
-      delete image_path(image)
+      delete image_path(@image)
     end
 
     assert_redirected_to images_path
@@ -113,3 +140,5 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     Image.create!(link: link, tag_list: tag_list)
   end
 end
+
+# rubocop:enable Metrics/ClassLength

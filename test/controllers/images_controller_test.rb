@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ClassLength
 require 'test_helper'
 
 class ImagesControllerTest < ActionDispatch::IntegrationTest
@@ -139,3 +140,5 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     Image.create!(link: link, tag_list: tag_list)
   end
 end
+
+# rubocop:enable Metrics/ClassLength

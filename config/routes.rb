@@ -3,4 +3,7 @@ Rails.application.routes.draw do
   root 'images#index'
 
   resources :images
+
+  get '/images/:id/share', to: 'images#share', as: 'share'
+  post '/images/:id/share', to: 'images#send_share_email'
 end

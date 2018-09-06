@@ -1,5 +1,5 @@
 class ImagesController < ApplicationController
-  before_action :validate_image_exists, only: %i[show edit update destroy]
+  before_action :validate_image_exists, only: %i[show edit update destroy send_share_email]
 
   def index
     tag_name = params[:tag]
@@ -47,6 +47,20 @@ class ImagesController < ApplicationController
 
     flash[:success] = 'You have successfully deleted the image.'
     redirect_to images_path
+  end
+
+  def share
+    @image = Image.find(params[:id])
+  end
+
+  def send_share_email
+    ImageMailer.with(params).share_image.deliver
+
+    flash[:success] = 'Email has been successfully sent'
+    redirect_to images_path
+  rescue StandardError
+    flash[:danger] = 'Problem sending email'
+    render :share, status: :unprocessable_entity
   end
 
   private

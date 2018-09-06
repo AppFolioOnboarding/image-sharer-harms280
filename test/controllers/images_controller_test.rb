@@ -141,8 +141,8 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_send_share_email__success
-    params = { id: @image[:id], email: { address: 'friend@example.com',
-                                         message: 'This is a message to send the person' } }
+    params = { id: @image[:id], share_email: { address: 'friend@example.com',
+                                               message: 'This is a message to send the person' } }
     post share_url(@image), params: params
 
     assert_response :redirect
@@ -153,7 +153,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_send_share_email__fail
-    params = { id: @image[:id], email: { address: '', message: 'This is a message to send the person' } }
+    params = { id: @image[:id], share_email: { address: '', message: 'This is a message to send the person' } }
     post share_url(@image), params: params
 
     assert_response :unprocessable_entity

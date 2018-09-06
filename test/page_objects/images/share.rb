@@ -3,7 +3,7 @@ module PageObjects
     class SharePage < PageObjects::Document
       path :share
 
-      form_for :email do
+      form_for :share_email do
         element :address
         element :message
       end

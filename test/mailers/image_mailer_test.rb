@@ -5,8 +5,8 @@ class ImageMailerTest < ActionMailer::TestCase
     image = Image.create!(link: 'https://www.massinsight.org/wp-content/uploads/2016/05/placeholder-4-500x300.png',
                           tag_list: 'tag1 tag2 tag3')
 
-    params = { id: image[:id], email: { address: 'friend@example.com',
-                                        message: 'This is a message to send the person' } }
+    params = { id: image[:id], share_email: { address: 'friend@example.com',
+                                              message: 'This is a message to send the person' } }
 
     email = ImageMailer.with(params).share_image
 

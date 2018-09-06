@@ -2,8 +2,8 @@
 
 <%= image_tag @image.link %>
 
-<%= simple_form_for :email, html: {novalidate: false}, url: share_url do |f| %>
-  <%= f.input :address, label: 'Email Address', as: :email, required: true %>
+<%= simple_form_for @email, url: share_url do |f| %>
+  <%= f.input :address, label: 'Email Address', as: :string %>
   <%= f.input :message, as: :text %>
   <%= f.button :submit, 'Send Email', class: 'btn btn-primary' %>
 <% end %>

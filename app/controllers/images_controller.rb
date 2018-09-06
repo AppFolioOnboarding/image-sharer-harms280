@@ -57,19 +57,10 @@ class ImagesController < ApplicationController
   def send_share_email
     @email = ShareEmail.new(email_params)
 
-    if @email.valid?
-      ImageMailer.with(params).share_image.deliver
-
-      flash[:success] = 'Email has been successfully sent'
-      redirect_to images_path
-    else
-      flash[:danger] = 'Problem sending email'
-      render :share, status: :unprocessable_entity
-    end
-    # rescue StandardError
-    # flash[:danger] = 'Problem sending email'
-    # render :share, status: :unprocessable_entity
-    # end
+    handle_email_send(@email)
+  rescue StandardError
+    flash[:danger] = 'Problem sending email'
+    render :share, status: :unprocessable_entity
   end
 
   private
@@ -92,5 +83,16 @@ class ImagesController < ApplicationController
 
   def email_params
     params.require(:share_email).permit(:address, :message)
+  end
+
+  def handle_email_send(email)
+    if email.valid?
+      ImageMailer.with(params).share_image.deliver
+      flash[:success] = 'Email has been successfully sent'
+      redirect_to images_path
+    else
+      flash[:danger] = 'Form requires a valid email'
+      render :share, status: :unprocessable_entity
+    end
   end
 end

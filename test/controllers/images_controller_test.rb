@@ -157,7 +157,8 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     post share_url(@image), params: params
 
     assert_response :unprocessable_entity
-    assert_select '.alert-danger', 'Problem sending email'
+    assert_select '.alert-danger', 'Form requires a valid email'
+    assert_select '.invalid-feedback', "Address can't be blank and Address has invalid format"
   end
 
   private

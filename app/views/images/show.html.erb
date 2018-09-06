@@ -1,4 +1,7 @@
 <h1 id="header">Show Image</h1>
+<div>
+  <%= link_to 'Share Image', share_path(@image), class: 'btn btn-primary' %>
+</div>
 <%= image_tag @image.link%>
 <h2>Tags</h2>
 <ul class="tag-list">

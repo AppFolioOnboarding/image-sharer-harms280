@@ -133,6 +133,34 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_share
+    get share_url(@image)
+
+    assert_response :ok
+    assert_select '#header', 'Share This Image!'
+  end
+
+  def test_send_share_email__success
+    params = { id: @image[:id], share_email: { address: 'friend@example.com',
+                                               message: 'This is a message to send the person' } }
+    post share_url(@image), params: params
+
+    assert_response :redirect
+    assert_redirected_to images_path
+    follow_redirect!
+
+    assert_select '.alert-success', 'Email has been successfully sent'
+  end
+
+  def test_send_share_email__fail
+    params = { id: @image[:id], share_email: { address: '', message: 'This is a message to send the person' } }
+    post share_url(@image), params: params
+
+    assert_response :unprocessable_entity
+    assert_select '.alert-danger', 'Form requires a valid email'
+    assert_select '.invalid-feedback', "Address can't be blank and Address has invalid format"
+  end
+
   private
 
   def create_image(link: 'https://carepharmaceuticals.com.au/wp-content/uploads/sites/19/2018/02/placeholder-600x400.png',

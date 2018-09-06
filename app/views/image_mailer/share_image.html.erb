@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+<h1>Image Share</h1>
+<p>
+  This image has been shared with you!
+</p>
+<%= image_tag(@image[:link]) %>
+<p>
+  <%= @email[:message] %>
+</p>
+<p>Like what you see? Then checkout our site <%= link_to('here', images_url) %>!</p>
+</body>
+</html>

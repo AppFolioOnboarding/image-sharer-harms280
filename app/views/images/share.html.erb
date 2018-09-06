@@ -1,0 +1,10 @@
+<h1 id="header">Share This Image!</h1>
+
+<%= image_tag @image.link %>
+
+<%= simple_form_for @email, url: share_url do |f| %>
+  <%= f.input :address, label: 'Email Address', as: :string %>
+  <%= f.input :message, as: :text %>
+  <%= f.button :submit, 'Send Email', class: 'btn btn-primary' %>
+<% end %>
+

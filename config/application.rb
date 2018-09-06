@@ -28,5 +28,6 @@ module Base
     }
 
     config.active_record.sqlite3.represent_boolean_as_integer = true
+    config.action_mailer.raise_delivery_errors = true
   end
 end

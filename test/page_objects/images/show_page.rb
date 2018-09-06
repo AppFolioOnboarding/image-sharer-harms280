@@ -18,6 +18,11 @@ module PageObjects
         window.change_to(EditPage)
       end
 
+      def go_to_share!
+        node.click_on('Share Image')
+        window.change_to(SharePage)
+      end
+
       def delete
         node.click_on('Delete')
         yield node.driver.browser.switch_to.alert

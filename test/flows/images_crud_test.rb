@@ -111,4 +111,25 @@ class ImagesCrudTest < FlowTestCase
     images_index_page = images_index_page.clear_tag_filter!
     assert_equal 3, images_index_page.images.count
   end
+
+  test 'share an image' do
+    puppy_url = 'http://www.pawderosa.com/images/puppies.jpg'
+
+    Image.create!(link: puppy_url, tag_list: 'superman, cute')
+
+    images_index_page = PageObjects::Images::IndexPage.visit
+    assert_equal 1, images_index_page.images.count
+    assert images_index_page.showing_image?(link: puppy_url)
+    image_to_share = images_index_page.images.find do |image|
+      image.link == puppy_url
+    end
+
+    image_show_page = image_to_share.view!
+    image_share_page = image_show_page.go_to_share!
+
+    image_index_page = image_share_page.share_image!(address: 'test@test.com', message: 'Check out this image')
+      .as_a(PageObjects::Images::IndexPage)
+
+    assert_equal 'Email has been successfully sent', image_index_page.flash_message(:success)
+  end
 end

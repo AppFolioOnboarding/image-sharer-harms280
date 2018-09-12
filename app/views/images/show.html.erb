@@ -1,6 +1,6 @@
 <h1 id="header">Show Image</h1>
 <div>
-  <%= link_to 'Share Image', share_path(@image), class: 'btn btn-primary' %>
+  <button class="btn btn-primary" data-toggle="modal" data-target="#shareModal">Share Image</button>
 </div>
 <%= image_tag @image.link%>
 <h2>Tags</h2>
@@ -11,3 +11,27 @@
 </ul>
 <%= link_to 'Edit',  edit_image_path(@image), class: 'btn btn-secondary'%>
 <%= link_to 'Delete', image_path(@image), method: :delete, class: 'btn btn-danger', data: {confirm: 'Are you sure?'} %>
+
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="shareModalTitle">Share This Image!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <%= simple_form_for @email, remote: true, url: share_url do |f| %>
+          <%= f.input :address, label: 'Email Address', as: :string %>
+          <%= f.input :message, as: :text %>
+          <%= f.button :submit, 'Send Email', class: 'btn btn-primary' %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= content_for :javascript do %>
+  <%= javascript_pack_tag 'images/show/show' %>
+<% end %>

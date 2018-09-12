@@ -4,6 +4,19 @@ module PageObjects
       path :image
 
       collection :tag_elements, locator: '.tag-list', item_locator: 'li'
+      element :modal, locator: '#shareModal'
+
+      form_for :share_email do
+        element :address
+        element :message
+      end
+
+      def share_image(address: nil, message: nil)
+        self.address.set(address) if address.present?
+        self.message.set(message) if message.present?
+        node.click_button('Send Email')
+        window.change_to(self.class)
+      end
 
       def image_url
         node.find('img')[:src]
@@ -18,9 +31,8 @@ module PageObjects
         window.change_to(EditPage)
       end
 
-      def go_to_share!
+      def pop_share_modal
         node.click_on('Share Image')
-        window.change_to(SharePage)
       end
 
       def delete

@@ -1,3 +1,4 @@
+# rubocop:disable Metrics/ClassLength
 require 'flow_test_helper'
 
 class ImagesCrudTest < FlowTestCase
@@ -125,11 +126,21 @@ class ImagesCrudTest < FlowTestCase
     end
 
     image_show_page = image_to_share.view!
-    image_share_page = image_show_page.go_to_share!
 
-    image_index_page = image_share_page.share_image!(address: 'test@test.com', message: 'Check out this image')
-      .as_a(PageObjects::Images::IndexPage)
+    assert image_show_page.modal.hidden?
+    image_show_page.pop_share_modal
+    assert image_show_page.modal.visible?
+    image_show_page = image_show_page.share_image(address: '', message: 'Check out this image')
+      .as_a(PageObjects::Images::ShowPage)
 
-    assert_equal 'Email has been successfully sent', image_index_page.flash_message(:success)
+    assert_equal 'Form requires a valid email', image_show_page.flash_message(:danger)
+    assert_equal "Address can't be blank. Address has invalid format", image_show_page.address.error_message
+
+    image_show_page = image_show_page.share_image(address: 'test@test.com', message: 'Check out this image')
+      .as_a(PageObjects::Images::ShowPage)
+
+    assert_equal 'Email has been successfully sent', image_show_page.flash_message(:success)
+    assert image_show_page.modal.hidden?
   end
 end
+# rubocop:enable Metrics/ClassLength

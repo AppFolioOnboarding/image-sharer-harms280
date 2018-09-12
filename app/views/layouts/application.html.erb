@@ -14,12 +14,13 @@
 
     <%= render partial: 'layouts/navbar' %>
     <%=	 render partial: 'layouts/flash_messages' unless flash.empty? %>
-    <div class="container">
+    <div class="main-content container">
       <%= yield %>
     </div>
     <%= render partial: 'layouts/footer' %>
 
     <%= javascript_include_tag 'application' %>
     <%= javascript_pack_tag 'application' %>
+    <%= yield :javascript %>
   </body>
 </html>

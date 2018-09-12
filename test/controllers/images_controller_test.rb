@@ -133,32 +133,23 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_share
-    get share_url(@image)
-
-    assert_response :ok
-    assert_select '#header', 'Share This Image!'
-  end
-
   def test_send_share_email__success
     params = { id: @image[:id], share_email: { address: 'friend@example.com',
                                                message: 'This is a message to send the person' } }
-    post share_url(@image), params: params
+    post share_url(@image), xhr: true, params: params
 
-    assert_response :redirect
-    assert_redirected_to images_path
-    follow_redirect!
-
-    assert_select '.alert-success', 'Email has been successfully sent'
+    assert_response :ok
+    assert_equal '[["success","Email has been successfully sent"]]', @response.body
   end
 
   def test_send_share_email__fail
     params = { id: @image[:id], share_email: { address: '', message: 'This is a message to send the person' } }
-    post share_url(@image), params: params
+    post share_url(@image), xhr: true, params: params
 
     assert_response :unprocessable_entity
-    assert_select '.alert-danger', 'Form requires a valid email'
-    assert_select '.invalid-feedback', "Address can't be blank and Address has invalid format"
+    assert_equal "{\"errors\":{\"address\":[\"can't be blank\",\"has invalid format\"]}," \
+                 '"flash":[["danger","Form requires a valid email"]]}',
+                 @response.body
   end
 
   private
